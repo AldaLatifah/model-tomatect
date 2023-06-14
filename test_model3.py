@@ -59,17 +59,49 @@ test_generator = test_datagen.flow_from_directory(test_dir,
                                                   batch_size=batch_size,
                                                   class_mode='categorical')
 model =Sequential()
-model.add(Conv2D(32,(3,3),input_shape=(img_width, img_height, 3),activation="relu"))
-model.add(MaxPooling2D())
-model.add(Conv2D(filters=16,kernel_size=(3,3),activation="relu",padding="same"))
-model.add(MaxPooling2D())
-model.add(Conv2D(filters=16,kernel_size=(3,3),activation="relu",padding="same"))
-model.add(MaxPooling2D())
-model.add(Dropout(0.2))
+#  tf.keras.layers.Conv2D(32, kernel_size = (3,3), activation='relu', input_shape=input_shape),
+#     tf.keras.layers.MaxPooling2D((2, 2)),
+#     tf.keras.layers.Conv2D(64,  kernel_size = (3,3), activation='relu'),
+#     tf.keras.layers.MaxPooling2D((2, 2)),
+#     tf.keras.layers.Conv2D(64,  kernel_size = (3,3), activation='relu'),
+#     tf.keras.layers.MaxPooling2D((2, 2)),
+#     tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+#     tf.keras.layers.MaxPooling2D((2, 2)),
+#     tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+#     tf.keras.layers.MaxPooling2D((2, 2)),
+#     tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+#     tf.keras.layers.MaxPooling2D((2, 2)),
+#     tf.keras.layers.Flatten(),
+#     tf.keras.layers.Dense(64, activation='relu'),
+#     tf.keras.layers.Dense(n_classes, activation='softmax'),
+model.add(Conv2D(32, kernel_size = (3,3), activation='relu', input_shape=(img_width, img_height, 3)))
+model.add(MaxPooling2D((2, 2)))
+model.add(Conv2D(64,  kernel_size = (3,3), activation='relu'))
+model.add(MaxPooling2D((2, 2)))
+model.add(Conv2D(64,  kernel_size = (3,3), activation='relu'))
+model.add(MaxPooling2D((2, 2)))
+model.add(Conv2D(64,  (3,3), activation='relu'))
+model.add(MaxPooling2D((2, 2)))
+model.add(Conv2D(64,  (3,3), activation='relu'))
+model.add(MaxPooling2D((2, 2)))
+model.add(Conv2D(64,  (3,3), activation='relu'))
+model.add(MaxPooling2D((2, 2)))
 model.add(Flatten())
-model.add(Dense(units=1024,activation="relu"))
-model.add(Dropout(0.2))
-model.add(Dense(units=train_generator.num_classes,activation="softmax"))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(train_generator.num_classes,activation="softmax"))
+
+# #BATAS
+# model.add(Conv2D(32,(3,3),input_shape=(img_width, img_height, 3),activation="relu"))
+# model.add(MaxPooling2D())
+# model.add(Conv2D(filters=16,kernel_size=(3,3),activation="relu",padding="same"))
+# model.add(MaxPooling2D())
+# model.add(Conv2D(filters=16,kernel_size=(3,3),activation="relu",padding="same"))
+# model.add(MaxPooling2D())
+# model.add(Dropout(0.2))
+# model.add(Flatten())
+# model.add(Dense(units=1024,activation="relu"))
+# model.add(Dropout(0.2))
+# model.add(Dense(units=train_generator.num_classes,activation="softmax"))
 
 model.compile(optimizer=legacy.Adam(learning_rate=0.001),
                    loss='categorical_crossentropy',
@@ -77,7 +109,7 @@ model.compile(optimizer=legacy.Adam(learning_rate=0.001),
 
 history = model.fit(train_generator,
                     steps_per_epoch=8000//batch_size,
-                    epochs=50,
+                    epochs=20,
                     validation_data=validation_generator,
                     validation_steps =1500//batch_size,
                     verbose=1)
